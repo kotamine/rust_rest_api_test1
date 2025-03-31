@@ -1,1 +1,0 @@
-fn() -> impl warp::Filter + warp::filter::FilterBase<Extract = impl Reply, Error = Rejection> + Clone {routes}
