@@ -10,10 +10,7 @@ pub mod func {
 async fn main() {
     let routes = func::routes::routes();
     println!("Server started at http://localhost:8000");
-    warp::serve(routes).run(([127, 0, 0, 1], 8000)).await;
-
-    let routes2 = func::routes::routes2();
-    warp::serve(routes2).run(([127, 0, 0, 1], 8000)).await;
+    warp::serve(routes).run(([127, 0, 0, 1], 8000)).await; 
 }
 
 
