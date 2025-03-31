@@ -7,6 +7,10 @@ pub fn routes() -> impl Filter<Extract = impl warp::Reply, Error = warp::Rejecti
     get_post()
 }
 
+pub fn routes2() -> impl Filter<Extract = impl warp::Reply, Error = warp::Rejection> + Clone {
+    generate()
+}
+
 // A route to handle GET requests for a specific post
 fn get_post() -> impl Filter<Extract = impl warp::Reply, Error = warp::Rejection> + Clone {
     warp::path!("posts" / u64)
@@ -14,6 +18,11 @@ fn get_post() -> impl Filter<Extract = impl warp::Reply, Error = warp::Rejection
         .and_then(handlers::get_post)
 }
 
+fn generate() -> impl Filter<Extract = impl warp::Reply, Error = warp::Rejection> + Clone {
+    warp::path!("generate" / String)
+        .and(warp::get())
+        .and_then(handlers::generate)
+}
 
 
 
