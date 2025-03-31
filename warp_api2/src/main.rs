@@ -26,8 +26,9 @@ async fn main() {
         .and(warp::body::content_length_limit(1024 * 16))
         .and(warp::body::json())
         .map(|mut prompt: Prompt| {
-            prompt.generated = Some(String::from(
-                "This is a generated text from prompt = {&prompt.prompt}."));
+            prompt.generated = Some(
+                String::from("This is a generated text from prompt = ")
+                + &prompt.prompt );
             warp::reply::json(&prompt)
         });
     
