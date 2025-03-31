@@ -1,18 +1,18 @@
 pub mod func {
     pub mod routes;
+    // pub mod utils1;
+    pub mod handlers;
+    pub mod models;
 }
-//use crate::routes::routes::routes;
-// use crate::routes::routes::function;
 
-// #[tokio::main]
-// async fn main() {
-//     func::routes::routes(); 
-    // let routes = routes::routes::routes();
-    // println!("Server started at http://localhost:8000");
-    // warp::serve(routes).run(([127, 0, 0, 1], 8000)).await;
-// }
 
-fn main() {
-    func::routes::routes(); 
+#[tokio::main]
+async fn main() {
+    let routes = func::routes::routes();
+    println!("Server started at http://localhost:8000");
+    warp::serve(routes).run(([127, 0, 0, 1], 8000)).await;
 }
+
+
+
 
