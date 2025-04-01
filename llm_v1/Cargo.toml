@@ -1,0 +1,15 @@
+[package]
+name = "llm_v1"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow = { version = "1", features = ["backtrace"] }
+clap = { version = "4.2.4", features = ["derive"] }
+candle-core = "0.8.4"
+candle-transformers = "0.8.4"
+candle-nn = "0.8.4" 
+candle-examples = "0.8.4" 
+tokenizers = "0.21.0"
+hf-hub = "0.4.1"
+
