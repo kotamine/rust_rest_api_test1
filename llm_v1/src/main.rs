@@ -277,9 +277,14 @@ fn main() {
     let eos_token = *tos.tokenizer().get_vocab(true).get(eos_token).unwrap();
     let start_post_prompt = std::time::Instant::now();
     let mut sampled = 0;
+    let context_size = 1024; // <- added 
     for index in 0..to_sample {
-        let input = Tensor::new(&[next_token], &device).unwrap().unsqueeze(0).unwrap();
-        let logits = model.forward(&input, tokens.len() + index).unwrap();
+        // let input = Tensor::new(&[next_token], &device).unwrap().unsqueeze(0).unwrap();
+        // let logits = model.forward(&input, tokens.len() + index).unwrap();
+        // let context_size = if index > 0 { 1 } else { all_tokens.len() };
+        let ctxt = &all_tokens[all_tokens.len().saturating_sub(context_size)..];
+        let input = Tensor::new(ctxt, &device).unwrap().unsqueeze(0).unwrap();
+        let logits = model.forward(&input, ctxt.len()+1).unwrap();
         let logits = logits.squeeze(0).unwrap();
         let logits = if args.repeat_penalty == 1. {
             logits
