@@ -1,7 +1,14 @@
 // create a relevant subset of this candle-examples case
 // https://github.com/huggingface/candle/blob/main/candle-examples/examples/quantized-qwen2-instruct/main.rs 
 
-use std::io::Write;
+#[cfg(feature = "mkl")]
+extern crate intel_mkl_src;
+
+#[cfg(feature = "accelerate")]
+extern crate accelerate_src;
+
+use std::{io::Write, vec};
+use candle_nn::kv_cache;
 use clap::{Parser, ValueEnum};
 
 use anyhow;
@@ -12,7 +19,11 @@ use candle_core::Tensor;
 use candle_transformers::generation::{LogitsProcessor, Sampling};
 
 use candle_examples::token_output_stream::TokenOutputStream;
-use candle_transformers::models::quantized_qwen2::ModelWeights as Qwen2;
+// use candle_transformers::models::quantized_qwen2::ModelWeights as Qwen2;
+
+mod quantized_qwen2_copy; 
+use quantized_qwen2_copy::ModelWeights as Qwen2; 
+use quantized_qwen2_copy::LayerWeights;
 
 const DEFAULT_PROMPT: &str = "Write a function to count prime numbers up to N. ";
 
@@ -189,10 +200,8 @@ fn main() {
 
     // let model_path = args.model()?;
     let model_path = args.model().unwrap();
-    // let mut file = std::fs::File::open(&model_path)?;
     let mut file = std::fs::File::open(&model_path).unwrap();
     let start = std::time::Instant::now();
-    // let device = candle_examples::device(args.cpu)?;
     let device = candle_examples::device(args.cpu).unwrap();
 
     let mut model = {
@@ -277,14 +286,17 @@ fn main() {
     let eos_token = *tos.tokenizer().get_vocab(true).get(eos_token).unwrap();
     let start_post_prompt = std::time::Instant::now();
     let mut sampled = 0;
-    let context_size = 1024; // <- added 
+    // let context_size = 1024; // <- added 
+
     for index in 0..to_sample {
-        // let input = Tensor::new(&[next_token], &device).unwrap().unsqueeze(0).unwrap();
-        // let logits = model.forward(&input, tokens.len() + index).unwrap();
-        // let context_size = if index > 0 { 1 } else { all_tokens.len() };
-        let ctxt = &all_tokens[all_tokens.len().saturating_sub(context_size)..];
-        let input = Tensor::new(ctxt, &device).unwrap().unsqueeze(0).unwrap();
-        let logits = model.forward(&input, ctxt.len()+1).unwrap();
+        // in the backend, the model is using cache to add next token. 
+        // try clearing the kv_cache for all layers
+        // for layer in model.layers.iter_mut() {
+        //     layer.kv_cache = None; 
+        // }  
+
+        let input = Tensor::new(&[next_token], &device).unwrap().unsqueeze(0).unwrap();
+        let logits: Tensor = model.forward(&input, tokens.len() + index).unwrap();
         let logits = logits.squeeze(0).unwrap();
         let logits = if args.repeat_penalty == 1. {
             logits
