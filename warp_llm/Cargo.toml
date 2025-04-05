@@ -1,0 +1,30 @@
+[package]
+name = "llm_v1"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+accelerate-src = { version = "0.3.2" , optional = true }
+anyhow = { version = "1", features = ["backtrace"] }
+clap = { version = "4.2.4", features = ["derive"] }
+candle-core = "0.8.4"
+candle-transformers = "0.8.4"
+candle-nn = "0.8.4" 
+candle-examples = "0.8.4" 
+tokenizers = "0.21.0"
+hf-hub = "0.4.1"
+intel-mkl-src = { version = "0.8.1", features = ["mkl-static-lp64-iomp"], optional = true }
+tracing = "0.1.37"
+#cudarc = { version = "0.13.5", features = ["std", "cublas", "cublaslt", "curand", "driver", "nvrtc", "f16", "cuda-version-from-build-system", "dynamic-linking"], default-features=false }
+#ug-cuda = "0.1.0"
+warp = "0.3"
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+
+
+[features]
+default = []
+accelerate = ["dep:accelerate-src", "candle-core/accelerate", "candle-nn/accelerate", "candle-transformers/accelerate"]
+cuda = ["candle-core/cuda", "candle-nn/cuda", "candle-transformers/cuda"] #,"dep:bindgen_cuda"
+mkl = ["dep:intel-mkl-src", "candle-core/mkl", "candle-nn/mkl", "candle-transformers/mkl"]
+
