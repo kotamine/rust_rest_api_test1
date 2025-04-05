@@ -7,23 +7,12 @@ extern crate intel_mkl_src;
 #[cfg(feature = "accelerate")]
 extern crate accelerate_src;
 
-// use std::{io::Write, vec};
-// use candle_nn::kv_cache;
+
 use clap::{Parser, ValueEnum};
 
 use anyhow;
 use tokenizers::Tokenizer;
 
-// use candle_core::quantized::gguf_file;
-// use candle_core::Tensor;
-// use candle_transformers::generation::{LogitsProcessor, Sampling};
-
-// use candle_examples::token_output_stream::TokenOutputStream;
-// use candle_transformers::models::quantized_qwen2::ModelWeights as Qwen2;
-
-// mod crate::llm::quantized_qwen2_copy; 
-use super::quantized_qwen2_copy::ModelWeights as Qwen2; 
-// use quantized_qwen2_copy::LayerWeights;
 
 pub const DEFAULT_PROMPT: &str = "Write a function to count prime numbers up to N. ";
 

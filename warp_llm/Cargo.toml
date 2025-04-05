@@ -15,6 +15,7 @@ tokenizers = "0.21.0"
 hf-hub = "0.4.1"
 intel-mkl-src = { version = "0.8.1", features = ["mkl-static-lp64-iomp"], optional = true }
 tracing = "0.1.37"
+## uncomment cudarc and ug-cuda for cuda-enabled machine
 #cudarc = { version = "0.13.5", features = ["std", "cublas", "cublaslt", "curand", "driver", "nvrtc", "f16", "cuda-version-from-build-system", "dynamic-linking"], default-features=false }
 #ug-cuda = "0.1.0"
 warp = "0.3"
