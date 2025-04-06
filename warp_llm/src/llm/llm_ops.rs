@@ -172,6 +172,7 @@ pub fn run_model(model: &mut Qwen2, tos: &mut TokenOutputStream, args: &Args, pr
     }
     if let Some(rest) = tos.decode_rest().map_err(candle_core::Error::msg).unwrap() {
         print!("{rest}");
+        str_output += &rest; 
     }
     std::io::stdout().flush().unwrap();
     let dt = start_post_prompt.elapsed();

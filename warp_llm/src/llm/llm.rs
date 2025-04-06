@@ -30,6 +30,12 @@ pub enum Which {
     W2_72b,
     #[value(name = "deepseekr1-qwen7b")]
     DeepseekR1Qwen7B,
+    #[value(name = "2.5-corder:14B")]
+    W25_14b,
+    #[value(name = "2.5-corder:14B-q4")]
+    W25_14bQ4,
+    #[value(name = "2.5-corder:14B-q8")]
+    W25_14bQ8,
 }
 
 #[derive(Parser, Debug)]
@@ -106,6 +112,9 @@ impl Args {
                     Which::W2_7b => "Qwen/Qwen2-7B-Instruct",
                     Which::W2_72b => "Qwen/Qwen2-72B-Instruct",
                     Which::DeepseekR1Qwen7B => "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+                    Which::W25_14bQ4 => "Qwen/Qwen2.5-Coder-14B-Instruct",
+                    Which::W25_14bQ8 => "Qwen/Qwen2.5-Coder-14B-Instruct",
+                    Which::W25_14b => "Qwen/Qwen2.5-Coder-14B-Instruct",
                 };
                 let api = api.model(repo.to_string());
                 api.get("tokenizer.json")?
@@ -144,6 +153,21 @@ impl Args {
                         "DeepSeek-R1-Distill-Qwen-7B-Q4_K_M.gguf",
                         "main",
                     ),
+                    Which::W25_14bQ4 => (
+                        "Qwen/Qwen2.5-Coder-14B-Instruct-GGUF",
+                        "qwen2.5-coder-14b-instruct-q4_0.gguf",
+                        "main",
+                    ),
+                    Which::W25_14bQ8 => (
+                        "Qwen/Qwen2.5-Coder-14B-Instruct-GGUF",
+                        "qwen2.5-coder-14b-instruct-q8_0.gguf",
+                        "main",
+                    ),                    
+                    Which::W25_14b => (
+                        "Qwen/Qwen2.5-Coder-14B-Instruct-GGUF",
+                        "qwen2.5-coder-14b-instruct-fp16.gguf",
+                        "main",
+                    ),      
                 };
                 let api = hf_hub::api::sync::Api::new()?;
                 api.repo(hf_hub::Repo::with_revision(
