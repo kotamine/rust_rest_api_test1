@@ -59,12 +59,24 @@ pub fn build_model(args: &Args) -> Result<(Qwen2, TokenOutputStream)> {
 
 
 
-pub fn run_model(model: &mut Qwen2, tos: &mut TokenOutputStream, args: &Args) -> Result<String> {
+pub fn run_model(model: &mut Qwen2, tos: &mut TokenOutputStream, args: &Args, prompt:Option<&String>) 
+    -> Result<String> {
     let device = candle_examples::device(args.cpu).unwrap();
-    let prompt_str = args
-        .prompt
-        .clone()
-        .unwrap_or_else(|| llm::DEFAULT_PROMPT.to_string());
+    // let prompt_str = match prompt {
+    //     Some(p) => prompt.clone(),
+    //     // None => Some(&args.prompt.clone()
+    //     //                 .unwrap_or_else(|| llm::DEFAULT_PROMPT.to_string())),
+    //     None => { 
+    //         let p = args.prompt.clone().unwrap_or_else(|| llm::DEFAULT_PROMPT.to_string());
+    //         Some(&p)
+    //     }
+    // };
+    let prompt_str0 = args.prompt.clone().unwrap_or_else(|| llm::DEFAULT_PROMPT.to_string());
+    let prompt_str = if let Some(p) = prompt {
+        p.clone()
+    } else {
+        prompt_str0.clone()
+    };
     let prompt_str = match args.which {
         llm::Which::DeepseekR1Qwen7B => format!("<｜User｜>{prompt_str}<｜Assistant｜>"),
         _ => format!("<|im_start|>user\n{prompt_str}<|im_end|>\n<|im_start|>assistant\n"),

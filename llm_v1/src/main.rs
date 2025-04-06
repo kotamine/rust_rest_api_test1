@@ -8,7 +8,7 @@ extern crate intel_mkl_src;
 extern crate accelerate_src;
 
 use std::{io::Write, vec};
-use candle_nn::kv_cache;
+// use candle_nn::kv_cache;
 use clap::{Parser, ValueEnum};
 
 use anyhow;
@@ -23,7 +23,7 @@ use candle_examples::token_output_stream::TokenOutputStream;
 
 mod quantized_qwen2_copy; 
 use quantized_qwen2_copy::ModelWeights as Qwen2; 
-use quantized_qwen2_copy::LayerWeights;
+// use quantized_qwen2_copy::LayerWeights;
 
 const DEFAULT_PROMPT: &str = "Write a function to count prime numbers up to N. ";
 

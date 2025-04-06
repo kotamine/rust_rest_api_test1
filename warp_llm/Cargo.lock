@@ -1840,6 +1840,8 @@ dependencies = [
  "hf-hub",
  "intel-mkl-src",
  "serde",
+ "serde_derive",
+ "serde_json",
  "tokenizers",
  "tokio",
  "tracing",
